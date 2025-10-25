@@ -100,10 +100,12 @@ namespace ProductsPlease.Player.Input
         public void OnJump(InputAction.CallbackContext context)
         {
             if (context.performed || context.started)
+            {
                 jumpDebugger = true;
+                OnJumpEvent?.Invoke();
+            }
             else
                 jumpDebugger = false;
-            OnJumpEvent?.Invoke();
             DetectInputScheme(context.control);
         }
 

@@ -16,7 +16,6 @@ namespace ProductsPlease.Player
         private Camera cam;
         private Input.InputReader inputReader;
 
-   
 
         public override void Initialise()
         {
@@ -50,20 +49,17 @@ namespace ProductsPlease.Player
 
         private void ProcessLook(Vector2 input)
         {
-            float scale = Parent.inputReader.currentScheme=="Gamepad" ? Time.deltaTime : 1f;
-
-            mouseX = input.x * xSensitivity * scale;
-            mouseY = input.y * ySensitivity * scale;
-
+            mouseX = input.x * xSensitivity;
+            mouseY = input.y * ySensitivity;
             xRotation = Mathf.Clamp(xRotation - mouseY, -90f, 90f);
-            lookPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         }
 
 
         private void Look()
         {
-            cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            Parent.transform.Rotate(Vector3.up , mouseX, Space.World );
+            // cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+            Parent.transform.Rotate(Vector3.up, mouseX, Space.World);
+            lookPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         }
     }
 }
