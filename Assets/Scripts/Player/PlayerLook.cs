@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace ProductsPlease.Player
 {
@@ -9,10 +11,12 @@ namespace ProductsPlease.Player
         [SerializeField] private float xSensitivity = 3.5f;
         [SerializeField] private float ySensitivity = 3.5f;
         [SerializeField] private Transform lookPivot;
-        private float xRotation = 0f;
         private float mouseX = 0f;
         private float mouseY = 0f;
 
+        float yaw;  
+        float pitch; 
+        
         private Camera cam;
         private Input.InputReader inputReader;
 
@@ -47,19 +51,21 @@ namespace ProductsPlease.Player
             Look();
         }
 
+
         private void ProcessLook(Vector2 input)
         {
             mouseX = input.x * xSensitivity;
             mouseY = input.y * ySensitivity;
-            xRotation = Mathf.Clamp(xRotation - mouseY, -90f, 90f);
-        }
 
+            yaw   += mouseX;
+            pitch  = Mathf.Clamp(pitch - mouseY, -90f, 90f);
+            
+        }
 
         private void Look()
         {
-            // cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            Parent.transform.Rotate(Vector3.up, mouseX, Space.World);
-            lookPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            Parent.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+            lookPivot.localRotation        = Quaternion.Euler(pitch, 0f, 0f);
         }
     }
 }

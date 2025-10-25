@@ -17,8 +17,8 @@ namespace ProductsPlease.Player
             cam = Parent.Camera;
             inputReader = Parent.inputReader;
             currentInteractable = null;
-            
         }
+
         public override void OnEnabled()
         {
             base.OnEnabled();
@@ -36,10 +36,13 @@ namespace ProductsPlease.Player
             CheckInteraction();
         }
 
-        private void TryInteract()
+        private void TryInteract(bool start)
         {
-            if(currentInteractable)
-                currentInteractable.Interact();
+            if (!currentInteractable) return;
+            if (start)
+                currentInteractable.StartInteract();
+            else
+                currentInteractable.EndInteract();
         }
 
         private void CheckInteraction()
@@ -50,9 +53,9 @@ namespace ProductsPlease.Player
             {
                 if (hit.transform.gameObject.TryGetComponent(out InteractableComponent I))
                 {
-                    if(currentInteractable && I != currentInteractable)
+                    if (currentInteractable && I != currentInteractable)
                         currentInteractable.DisableOutline();
-                    
+
                     if (I.enabled)
                         SetNewCurrentInteractable(I);
                     else
@@ -70,9 +73,10 @@ namespace ProductsPlease.Player
             currentInteractable = newInteractable;
             currentInteractable.EnableOutline();
         }
+
         private void UnsetCurrentInteractable()
         {
-            if(!currentInteractable) return;
+            if (!currentInteractable) return;
             currentInteractable.DisableOutline();
             currentInteractable = null;
         }
