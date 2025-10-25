@@ -13,18 +13,18 @@ namespace ProductsPlease.Player
         private Vector3 moveVelocity;
         private bool isGrounded;
         private bool isCrouched;
-        
+
         private float crouchedHeight = .75f;
         private float standingHeight = 2f;
         private const float standingCenterY = 1f;
         private const float crouchedCenterY = 0.3525f;
         private const float crouchLerpSpeed = 10f;
 
-      [SerializeField] private Vector3 standingCamPos;
-      [SerializeField] private Vector3 crouchedCamPos ;
+        [SerializeField] private Vector3 standingCamPos;
+        [SerializeField] private Vector3 crouchedCamPos;
         private Camera cam;
-        
-        
+
+
         public override void Initialise()
         {
             base.Initialise();
@@ -48,27 +48,23 @@ namespace ProductsPlease.Player
             inputReader.OnCrouchEvent -= Crouch;
         }
 
-        private void FixedUpdate()
-        {
-            Move();
-            Gravity();
-        }
+   
 
         private void Update()
         {
+            Move();
+            Gravity();
             isGrounded = Parent.CharacterController.isGrounded;
-            
+
             float targetHeight = isCrouched ? crouchedHeight : standingHeight;
             float targetCenter = isCrouched ? crouchedCenterY : standingCenterY;
 
             Parent.CharacterController.height = Mathf.Lerp(Parent.CharacterController.height, targetHeight, Time.deltaTime * crouchLerpSpeed);
-            cam.transform.localPosition = Vector3.Lerp( cam.transform.localPosition, isCrouched ? crouchedCamPos : standingCamPos, Time.deltaTime * crouchLerpSpeed);
-           
+            cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, isCrouched ? crouchedCamPos : standingCamPos, Time.deltaTime * crouchLerpSpeed);
+
             Vector3 center = Parent.CharacterController.center;
             center.y = Mathf.Lerp(center.y, targetCenter, Time.deltaTime * crouchLerpSpeed);
             Parent.CharacterController.center = center;
-
-
         }
 
         private void ProcessMove(Vector2 input)

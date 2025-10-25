@@ -23,7 +23,7 @@ namespace ProductsPlease.Player.Input
 
         public event Action<Vector2> OnPlayerMoveEvent;
         public event Action<Vector2> OnLookEvent;
-        public event Action OnInteractEvent;
+        public event Action<bool> OnInteractEvent;
         public event Action<bool> OnCrouchEvent;
         public event Action OnJumpEvent;
 
@@ -93,7 +93,7 @@ namespace ProductsPlease.Player.Input
                 interactDebugger = true;
             else
                 interactDebugger = false;
-            OnInteractEvent?.Invoke();
+            OnInteractEvent?.Invoke(interactDebugger);
             DetectInputScheme(context.control);
         }
 

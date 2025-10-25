@@ -16,11 +16,10 @@ namespace ProductsPlease.Interactions
             DisableOutline();
         }
 
-        public virtual void Interact()
+        public virtual void StartInteract()
         {
             OnInteract?.Invoke();
         }
-
         public virtual void EndInteract()
         {
             OnEndInteract?.Invoke();
