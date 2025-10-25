@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a6e8290ee4edbfa4b983c46afc28bd6f
+guid: 15cef2477108cd3418d8b8f85be2996f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Room
-    second: {fileID: 2100000, guid: e8041c074cf462e4385f0a782a88ee06, type: 2}
+      name: LightBulb
+    second: {fileID: 2100000, guid: 0287b5c91bb559541a22b87ef932847a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

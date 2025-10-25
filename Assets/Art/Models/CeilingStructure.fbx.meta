@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a6e8290ee4edbfa4b983c46afc28bd6f
+guid: e4a725a0ae57ae343b4116302021f687
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Room
-    second: {fileID: 2100000, guid: e8041c074cf462e4385f0a782a88ee06, type: 2}
+      name: Ceiling Structure
+    second: {fileID: 2100000, guid: 66e119938b3e1ab4c91cdbe103d2a4cb, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -40,7 +40,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importPhysicalCameras: 1
