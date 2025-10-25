@@ -3,7 +3,12 @@ guid: f58f5b98be997a84aa555ed524775f1e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cherries
+    second: {fileID: 2100000, guid: 6b33f550cdae8094d9b61edaf3f7d4da, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
