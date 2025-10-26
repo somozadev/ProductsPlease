@@ -33,6 +33,7 @@ namespace ProductsPlease.Managers
         public TMP_Text metalsIsBannedText;      // "are" / "are not"
         public TMP_Text chemicalIsBannedText;    // "are" / "are not"
 
+        public void PrintRecipe(){}
         public void LoadNewDayData()
         {
             var rules = GameManager.Instance.DaysManager.CurrentDayRules;

@@ -39,7 +39,7 @@ namespace ProductsPlease.Managers
 
         DayParamsData currentDay;
         float lastSpawnTime;
-        int spawnedThisDay;
+        public int spawnedThisDay;
 
         public bool AllSpawned => spawnedThisDay >= maxProductsPerDay;
         public bool IsMoving => isMoving;
