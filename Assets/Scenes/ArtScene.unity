@@ -2179,6 +2179,7 @@ MonoBehaviour:
   raycastIgnoreLayers:
     serializedVersion: 2
     m_Bits: 0
+  aimUI: {fileID: 0}
 --- !u!114 &7330425813859534414
 MonoBehaviour:
   m_ObjectHideFlags: 0

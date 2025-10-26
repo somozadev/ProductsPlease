@@ -3,7 +3,12 @@ guid: 3e6a221b51b08be45876b822c3d660b8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Press
+    second: {fileID: 2100000, guid: 3cd31b272062ed949ad5f86804c52b18, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
