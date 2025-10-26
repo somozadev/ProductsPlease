@@ -23,12 +23,17 @@ namespace ProductsPlease.Interactions
             OnInteract?.Invoke();
         }
 
+        public virtual void StartInteract(RaycastHit hit)
+        {
+            StartInteract();
+        }
+
         public virtual void EndInteract()
         {
             OnEndInteract?.Invoke();
         }
 
-       
+
         public void DisableOutline()
         {
             outline.enabled = false;

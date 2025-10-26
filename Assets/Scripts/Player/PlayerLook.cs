@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
+﻿using UnityEngine;
 
 namespace ProductsPlease.Player
 {
@@ -11,23 +7,33 @@ namespace ProductsPlease.Player
         [SerializeField] private float xSensitivity = 3.5f;
         [SerializeField] private float ySensitivity = 3.5f;
         [SerializeField] private Transform lookPivot;
-        private float mouseX = 0f;
-        private float mouseY = 0f;
 
-        float yaw;  
-        float pitch; 
-        
+        [SerializeField] private float initialYawOffsetY = 0f;   
+        [SerializeField] private float initialPitchOffsetX = 0f; 
+
+        private float yawDelta;   
+        private float pitchDelta; 
+
+        private float baseYaw;    
+        private float basePitch;  
+
         private Camera cam;
         private Input.InputReader inputReader;
-
 
         public override void Initialise()
         {
             base.Initialise();
             cam = Parent.Camera;
             inputReader = Parent.inputReader;
-            if (!lookPivot)
-                lookPivot = transform;
+            if (!lookPivot) lookPivot = transform;
+
+            baseYaw   = NormalizeAngle(Parent.transform.localEulerAngles.y) + initialYawOffsetY;
+            basePitch = NormalizeAngle(lookPivot.localEulerAngles.x)       + initialPitchOffsetX;
+
+            yawDelta = 0f;
+            pitchDelta = 0f;
+
+            ApplyLook();
         }
 
         public override void OnEnabled()
@@ -48,24 +54,31 @@ namespace ProductsPlease.Player
 
         private void LateUpdate()
         {
-            Look();
+            ApplyLook();
         }
-
 
         private void ProcessLook(Vector2 input)
         {
-            mouseX = input.x * xSensitivity;
-            mouseY = input.y * ySensitivity;
+            yawDelta   += input.x * xSensitivity;
+            pitchDelta -= input.y * ySensitivity;
 
-            yaw   += mouseX;
-            pitch  = Mathf.Clamp(pitch - mouseY, -90f, 90f);
-            
+            pitchDelta = Mathf.Clamp(pitchDelta, -90f, 90f);
         }
 
-        private void Look()
+        private void ApplyLook()
         {
+            float yaw   = baseYaw   + yawDelta;
+            float pitch = Mathf.Clamp(basePitch + pitchDelta, -89.9f, 89.9f);
+
             Parent.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
             lookPivot.localRotation        = Quaternion.Euler(pitch, 0f, 0f);
+        }
+
+        private static float NormalizeAngle(float a)
+        {
+            a %= 360f;
+            if (a > 180f) a -= 360f;
+            return a;
         }
     }
 }

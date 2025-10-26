@@ -7,10 +7,11 @@ namespace ProductsPlease.Player
     public class PlayerInteraction : PlayerComponent
     {
         [SerializeField] private float playerReach = 3.0f;
+        [SerializeField] private LayerMask raycastIgnoreLayers;
         private InteractableComponent currentInteractable;
         private Input.InputReader inputReader;
         private Camera cam;
-
+        private RaycastHit currentHit;
         public override void Initialise()
         {
             base.Initialise();
@@ -38,10 +39,9 @@ namespace ProductsPlease.Player
 
         private void TryInteract(bool start)
         {
-
             if (!currentInteractable) return;
             if (start)
-                currentInteractable.StartInteract();
+                currentInteractable.StartInteract(currentHit);
             else
                 currentInteractable.EndInteract();
         }
@@ -50,8 +50,10 @@ namespace ProductsPlease.Player
         {
             var camTransform = cam.transform;
             var ray = new Ray(camTransform.position, camTransform.forward);
-            if (Physics.Raycast(ray, out var hit, playerReach))
+            var layerMaskToUse = ~raycastIgnoreLayers;
+            if (Physics.Raycast(ray, out var hit, playerReach, layerMaskToUse, QueryTriggerInteraction.Ignore))
             {
+                currentHit = hit;
                 if (hit.transform.gameObject.TryGetComponent(out InteractableComponent I))
                 {
                     if (currentInteractable && I != currentInteractable)

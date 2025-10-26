@@ -167,7 +167,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2883147018346038618}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -2.25, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -244,6 +244,8 @@ MonoBehaviour:
   xSensitivity: 0.015
   ySensitivity: 0.015
   lookPivot: {fileID: 6882875888063035321}
+  initialYawOffsetY: 90
+  initialPitchOffsetX: 0
 --- !u!114 &776953325042341958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +259,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerReach: 5
+  raycastIgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &4198713853723723085
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,9 +457,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.5
