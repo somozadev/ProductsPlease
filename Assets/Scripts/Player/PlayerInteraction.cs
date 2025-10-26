@@ -12,6 +12,8 @@ namespace ProductsPlease.Player
         private Input.InputReader inputReader;
         private Camera cam;
         private RaycastHit currentHit;
+        [SerializeField] private AimUIInteractor aimUI;
+
         public override void Initialise()
         {
             base.Initialise();
@@ -34,11 +36,13 @@ namespace ProductsPlease.Player
 
         private void Update()
         {
+            if (aimUI && aimUI.IsAimingUI) return;
             CheckInteraction();
         }
 
         private void TryInteract(bool start)
         {
+            if (aimUI && aimUI.IsAimingUI) return;
             if (!currentInteractable) return;
             if (start)
                 currentInteractable.StartInteract(currentHit);

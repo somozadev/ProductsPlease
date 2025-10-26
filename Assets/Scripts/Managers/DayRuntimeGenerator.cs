@@ -166,11 +166,6 @@ namespace ProductsPlease.Managers
                     destRule.forbiddenDestinations = PickDistinct(DESTINATIONS_POOL, forbidCount);
             }
 
-            if (Chance(0.35f))
-            {
-                int reqCount = 2;
-                destRule.requireScanForDestinations = PickDistinct(DESTINATIONS_POOL, reqCount);
-            }
             day.destinationRule = destRule;
 
             // ---------- CATEGORY RULES ----------
@@ -231,27 +226,9 @@ namespace ProductsPlease.Managers
             }
             day.attributeBanRule = attrBan;
 
-            // ---------- PROCESS RULES ----------
-            var proc = new ProcessRule
-            {
-                requireWeighAll = Chance(0.35f),
-                requireScanAll = Chance(0.30f),
-                requireMagneticCheck = Chance(0.25f),
-                requireRadiationCheck = Chance(0.20f),
-                requireChemicalCheck = Chance(0.25f),
-
-                ifInternationalRequireScan = Chance(0.35f),
-                ifElectronicsRequireMagnet = Chance(0.45f),
-                ifMedicalRequireChemical = Chance(0.45f),
-                ifRealHeavierThanDeclaredRequireRadiation = Chance(0.30f)
-            };
-            day.processRule = proc;
-
             // ---------- TUNING ----------
             day.maxBeltBuffer = 6;
             day.dayTimeSeconds = UnityEngine.Random.Range(75, 101);
-            day.maxStationsPerItem = 0;
-            day.designerNotes = "Auto-generated day.";
 
             return day;
         }

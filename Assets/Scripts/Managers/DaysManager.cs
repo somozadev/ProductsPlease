@@ -18,7 +18,7 @@ namespace ProductsPlease.Managers
         public DayRuntimeGenerator generator;
 
         [SerializeField] DayParamsData currentDayRules;
-
+        public DayParamsData CurrentDayRules => currentDayRules;
         private void Start()
         {
             currentDayRules = generator.GenerateNewRandomDayRules();
