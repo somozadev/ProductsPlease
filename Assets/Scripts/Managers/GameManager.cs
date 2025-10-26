@@ -22,6 +22,9 @@ namespace ProductsPlease.Managers
         public BenefitsManager BenefitsManager { get; private set; }
         public UIManager UIManager { get; private set; }
 
+
+        public int correctScansThisDay = 0;
+        public int incorrectScansThisDay = 0;
         private void Init()
         {
             DaysManager = GetComponent<DaysManager>();
