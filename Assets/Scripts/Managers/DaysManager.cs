@@ -17,7 +17,7 @@ namespace ProductsPlease.Managers
         public BeltManager belt;
         public DayRuntimeGenerator generator;
 
-        DayParamsData currentDayRules;
+        [SerializeField] DayParamsData currentDayRules;
 
         private void Start()
         {

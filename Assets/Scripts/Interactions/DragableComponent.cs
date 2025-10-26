@@ -9,21 +9,22 @@ namespace ProductsPlease.Interactions
         // === Only one active drag globally ===
         private static DragableComponent s_active;
 
-        [Header("Drag")]
-        public float spring = 600f;
+        [Header("Drag")] public float spring = 600f;
         public float damping = 6f;
+
         [Tooltip("Distance from camera where the grabbed point is held.")]
         public float holdDistance = 2.5f;
 
-        [Header("Raycast")]
-        [SerializeField] private LayerMask raycastIgnoreLayers;
+        [Header("Raycast")] [SerializeField] private LayerMask raycastIgnoreLayers;
         [SerializeField] private float mouseReach = 5.0f;
 
-        [Header("Line Renderer")]
-        public LineRenderer lineRenderer;     // shared or per-instance
-        public Transform lineRenderLocation;  // origin (e.g., player hand)
+        [Header("Line Renderer")] public LineRenderer lineRenderer; // shared or per-instance
+        public Transform lineRenderLocation; // origin (e.g., player hand)
+
         [Tooltip("If no LineRenderer is assigned/found, one will be created per instance.")]
         public bool autoCreateLineIfMissing = true;
+
+        [Header("Other")] [SerializeField] private bool kinematikCheck = false;
 
         // Runtime
         private bool isDragging;
@@ -34,9 +35,20 @@ namespace ProductsPlease.Interactions
         private Camera cam;
 
         // ===== Interactable hooks (IGNORED) =====
-        public override void StartInteract() { /* intentionally ignored (mouse-only) */ }
-        public override void StartInteract(RaycastHit hit) { /* intentionally ignored (mouse-only) */ }
-        public override void EndInteract() { /* intentionally ignored (mouse-only) */ }
+        public override void StartInteract()
+        {
+            /* intentionally ignored (mouse-only) */
+        }
+
+        public override void StartInteract(RaycastHit hit)
+        {
+            /* intentionally ignored (mouse-only) */
+        }
+
+        public override void EndInteract()
+        {
+            /* intentionally ignored (mouse-only) */
+        }
 
         // ===== Init =====
         public override void Initialise(GameObject owner)
@@ -105,7 +117,7 @@ namespace ProductsPlease.Interactions
 
             s_active = this;
 
-            attachedRb  = hit.rigidbody;
+            attachedRb = hit.rigidbody;
             attachedCol = hit.collider;
 
             var worldAttach = hit.point + hit.normal * 0.005f; // tiny offset for nicer line
@@ -115,6 +127,9 @@ namespace ProductsPlease.Interactions
 
             isDragging = true;
             if (lineRenderer) lineRenderer.positionCount = 2;
+
+            if (kinematikCheck)
+                attachedRb.isKinematic = false;
         }
 
         private void MouseEnd()
@@ -129,7 +144,10 @@ namespace ProductsPlease.Interactions
                 if (go) Destroy(go);
             }
 
-            attachedRb  = null;
+            if (kinematikCheck)
+                attachedRb.isKinematic = false;
+            
+            attachedRb = null;
             attachedCol = null;
 
             if (s_active == this) s_active = null;
@@ -177,7 +195,7 @@ namespace ProductsPlease.Interactions
             if (!lineRenderer) return;
 
             Vector3 start = lineRenderLocation ? lineRenderLocation.position : (cam ? cam.transform.position : transform.position);
-            Vector3 end = transform.position; 
+            Vector3 end = transform.position;
             if (attachedRb)
             {
                 end = attachedRb.transform.TransformPoint(attachmentLocalOnTarget);
