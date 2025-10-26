@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using ProductsPlease.Interactions;
 using TMPro;
 using UnityEngine;
 
@@ -27,11 +28,15 @@ namespace Interactions
 
         private bool isSleeping;
 
+
+        public InteractableComponent ClockInMachine;
+
         /// <summary>
         /// Lanza la secuencia de "sleep" mostrando 'Day X'.
         /// </summary>
         public void StartSleep(int dayNumber)
         {
+            ClockInMachine.canBeUsed = true;
             if (!isSleeping && gameObject.activeInHierarchy)
                 StartCoroutine(CoSleep(dayNumber));
         }

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using ProductsPlease.Managers;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace ProductsPlease.Interactions
@@ -9,11 +12,12 @@ namespace ProductsPlease.Interactions
     {
         private InteractableComponent interactableComponent;
         public ItemData data;
-
+    
         private void Awake()
         {
             interactableComponent = GetComponent<InteractableComponent>();
             interactableComponent.Initialise(gameObject);
+
         }
 
         public void Init(ItemData data)
@@ -53,6 +57,11 @@ namespace ProductsPlease.Interactions
             mc.sharedMesh = null;
             mc.sharedMesh = mesh;
             mc.convex = convex;
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            AudioManager.Instance.PlaySFX("Hit");
         }
     }
 }

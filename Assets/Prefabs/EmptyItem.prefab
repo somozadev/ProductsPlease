@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155643501734435382}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2916900454497629899, guid: 1858062a9b76e804cb1d993326af838d, type: 3}
 --- !u!23 &575427370974608274
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3cd31b272062ed949ad5f86804c52b18, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,7 +112,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2916900454497629899, guid: 1858062a9b76e804cb1d993326af838d, type: 3}
 --- !u!114 &6173321172956077354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,11 +190,15 @@ MonoBehaviour:
   OnEndInteract:
     m_PersistentCalls:
       m_Calls: []
-  force: 600
+  canBeUsed: 1
+  spring: 600
   damping: 6
-  distance: 15
+  holdDistance: 2.5
   raycastIgnoreLayers:
     serializedVersion: 2
     m_Bits: 128
-  lr: {fileID: 0}
+  mouseReach: 5
+  lineRenderer: {fileID: 0}
   lineRenderLocation: {fileID: 0}
+  autoCreateLineIfMissing: 1
+  kinematikCheck: 0

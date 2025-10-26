@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ProductsPlease.Player
 {
@@ -28,6 +29,12 @@ namespace ProductsPlease.Player
             playerMotor.Initialise();
             playerInteraction.Initialise();
             playerLook.Initialise();
+        }
+
+        private void Start()
+        {
+            AudioManager.Instance.PlaySFX("Intro");
+
         }
 
         private void OnEnable()

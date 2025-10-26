@@ -12,6 +12,8 @@ namespace ProductsPlease.Interactions
         public UnityEvent OnInteract;
         public UnityEvent OnEndInteract;
 
+        public bool canBeUsed = true;
+
         public virtual void Initialise(GameObject owner)
         {
             outline = owner.GetComponent<Outline>();
@@ -20,16 +22,22 @@ namespace ProductsPlease.Interactions
 
         public virtual void StartInteract()
         {
+            if (!canBeUsed) return;
             OnInteract?.Invoke();
+            AudioManager.Instance.PlaySFX("Button");
         }
 
         public virtual void StartInteract(RaycastHit hit)
         {
+            if (!canBeUsed) return;
+
             StartInteract();
         }
 
         public virtual void EndInteract()
         {
+            if (!canBeUsed) return;
+
             OnEndInteract?.Invoke();
         }
 
@@ -43,6 +51,8 @@ namespace ProductsPlease.Interactions
 
         public void EnableOutline()
         {
+            if (!canBeUsed) return;
+
             outline.enabled = true;
             if (GameManager.Instance.UIManager.toolTip)
                 GameManager.Instance.UIManager.toolTip.text = message;

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using ProductsPlease.Interactions;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ProductsPlease.Managers
 {
@@ -103,16 +106,106 @@ namespace ProductsPlease.Managers
             // resetea el tiempo actual a la base (se aplicará cuando llames StartNewDay)
             currentTime = maxDayTime;
 
-            // (opcional) aplica beneficios, si tienes otro sistema
-            CheckBenefits();
-
             // Actualiza la UI de tiempo después del fin de día
             UpdateTimeUI();
+            
+            // (opcional) aplica beneficios, si tienes otro sistema
+            CheckEndGame();
+
         }
 
-        public void CheckBenefits()
+        [Header("End Game Fade")]
+        [SerializeField] private CanvasGroup endFader;   // Panel negro con CanvasGroup (alpha 0 inicial)
+        [SerializeField] private TMP_Text endLabel;      // Texto centrado (opcional)
+        [SerializeField] private string endMessage = "BANKRUPT";
+        [SerializeField] private float endFadeIn = 0.6f;
+        [SerializeField] private float endHold   = 1.8f;
+        [SerializeField] private float endFadeOut = 0.0f; // no necesitamos fade out si cambiamos de escena
+        [SerializeField] private MonoBehaviour playerMotorToDisable; // opcional: tu componente de movimiento
+
+        private bool isEnding;
+     public void CheckEndGame()
         {
-            // Hook para recompensas/desbloqueos si lo necesitas
+            if (isEnding) return;
+
+            if (GameManager.Instance.currentMoney < 0)
+            {
+                StartCoroutine(CoEndGame());
+            }
+        }
+
+        private IEnumerator CoEndGame()
+        {
+            isEnding = true;
+
+            // Desactivar movimiento jugador (opcional)
+            if (playerMotorToDisable) playerMotorToDisable.enabled = false;
+
+            // Preparar UI
+            if (endFader)
+            {
+                endFader.gameObject.SetActive(true);
+                endFader.blocksRaycasts = true;
+                endFader.interactable = false;
+                endFader.alpha = 0f;
+            }
+
+            if (endLabel)
+            {
+                endLabel.gameObject.SetActive(true);
+                endLabel.text = endMessage;
+                var c = endLabel.color; c.a = 0f; endLabel.color = c;
+            }
+
+            // Fade IN a negro
+            if (endFader)
+            {
+                float t = 0f;
+                while (t < endFadeIn)
+                {
+                    t += Time.unscaledDeltaTime;
+                    float k = Mathf.Clamp01(t / Mathf.Max(0.01f, endFadeIn));
+                    endFader.alpha = k;
+
+                    // subir el alpha del label en el tramo final para que aparezca “sobre” el negro
+                    if (endLabel)
+                    {
+                        var col = endLabel.color;
+                        col.a = Mathf.Clamp01((k - 0.3f) / 0.7f); // aparece cuando el fondo ya está bastante negro
+                        endLabel.color = col;
+                    }
+                    yield return null;
+                }
+                endFader.alpha = 1f;
+                if (endLabel)
+                {
+                    var col = endLabel.color; col.a = 1f; endLabel.color = col;
+                }
+            }
+            else
+            {
+                // Si no hay fader, simplemente espera
+                yield return new WaitForSecondsRealtime(endFadeIn);
+            }
+
+            // Mantener mensaje un rato
+            if (endHold > 0f) yield return new WaitForSecondsRealtime(endHold);
+
+            // (Opcional) Fade out antes de cambiar (normalmente no hace falta)
+            if (endFadeOut > 0f && endFader)
+            {
+                float t = 0f;
+                while (t < endFadeOut)
+                {
+                    t += Time.unscaledDeltaTime;
+                    float k = 1f - Mathf.Clamp01(t / Mathf.Max(0.01f, endFadeOut));
+                    endFader.alpha = k;
+                    yield return null;
+                }
+            }
+
+            // Cargar escena 0
+            SceneManager.LoadScene(0);
         }
 
         private void UpdateTimeUI()
