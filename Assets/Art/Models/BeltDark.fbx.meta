@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5cf5a2182b85e9142931c21645f116c3
+guid: 9e9a3429a445a624399713b2e52743aa
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -9,16 +9,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: BeltStructure
     second: {fileID: 2100000, guid: 3c80a33497726ab4d905dd80bae5b600, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Button
-    second: {fileID: 2100000, guid: 75bc75a4aa446d949abdf7baae6663b5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wall props
-    second: {fileID: 2100000, guid: 5958b98d1b1380545b8a19eb1443fa6d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -50,7 +40,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importPhysicalCameras: 1
