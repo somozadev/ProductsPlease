@@ -53,6 +53,8 @@ namespace ProductsPlease.Managers
         public void StartNewDay()
         {
             dayCount++;
+            GameManager.Instance.dayCount++;
+
             currentTime = maxDayTime;
             dayInProgress = true;
             GameManager.Instance.GetComponent<BeltManager>().dayStarted = true;
@@ -82,10 +84,13 @@ namespace ProductsPlease.Managers
             // El próximo día tendrá más tiempo base
             maxDayTime += bonus;
 
+            int total = GameManager.Instance.GetComponent<BeltManager>().spawnedThisDay;
+
+            int correctNotPlaced = total - GameManager.Instance.incorrectScansThisDay - GameManager.Instance.correctScansThisDay;
+            GameManager.Instance.currentMoney += (correctNotPlaced * 10);
             // (opcional) resetear contadores para el próximo día
             GameManager.Instance.correctScansThisDay = 0;
             GameManager.Instance.incorrectScansThisDay = 0;
-
             // ----- 3) Llamar a la UI para imprimir el “recap/recipe” -----
             GameManager.Instance.UIManager?.PrintRecipe();
 

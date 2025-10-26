@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using ProductsPlease.Interactions;
 
@@ -30,10 +31,29 @@ namespace ProductsPlease.Managers
         private string priceStructute = "Prices must be >= 500$";
 
         public TMP_Text radioactiveIsBannedText; // "are" / "are not"
-        public TMP_Text metalsIsBannedText;      // "are" / "are not"
-        public TMP_Text chemicalIsBannedText;    // "are" / "are not"
+        public TMP_Text metalsIsBannedText; // "are" / "are not"
+        public TMP_Text chemicalIsBannedText; // "are" / "are not"
 
-        public void PrintRecipe(){}
+        public TMP_Text daysText;
+        public TMP_Text currentMoney;
+        public TMP_Text dailyQuotaLog;
+
+
+        [Header("Daily Quota FX")] [SerializeField]
+        private float quotaFadeIn = 0.12f;
+
+        [SerializeField] private float quotaHold = 1.10f;
+        [SerializeField] private float quotaFadeOut = 0.60f;
+        [SerializeField] private Vector2 quotaMoveUp = new Vector2(0f, 24f);
+        private Coroutine quotaRoutine;
+
+        public void PrintRecipe()
+        {
+            int quota = 2 * GameManager.Instance.dayCount;
+            TempDisplayDailyQuota(quota);
+            GameManager.Instance.currentMoney -= quota;
+        }
+
         public void LoadNewDayData()
         {
             var rules = GameManager.Instance.DaysManager.CurrentDayRules;
@@ -118,6 +138,110 @@ namespace ProductsPlease.Managers
                 chemicalIsBannedText.text = ((attr & HiddenFlags.IsChemical) != 0) ? "are" : "are not";
         }
 
+        public void UpdateCurrentMoney(int newTotal)
+        {
+            string colorHex = newTotal < 0 ? "#FF7070" : "#73FF70";
+            currentMoney.text = $"<color={colorHex}>{newTotal}$</color>";
+        }
+
+        public void UpdateCurrentDay(int newDay)
+        {
+            daysText.text = "day " + (newDay + 1).ToString();
+        }
+
+        public void TempDisplayDailyQuota(int daysQuota)
+        {
+            if (dailyQuotaLog)
+            {
+                dailyQuotaLog.text = $"Working fees -{daysQuota} $";
+            }
+
+            if (currentMoney)
+            {
+                int current = ParseMoney(currentMoney.text);
+                int newTotal = Mathf.Max(0, current - Mathf.Max(0, daysQuota));
+                currentMoney.text = newTotal + "$";
+            }
+
+            if (quotaRoutine != null) StopCoroutine(quotaRoutine);
+            quotaRoutine = StartCoroutine(CoFadeDailyQuota());
+        }
+
+        private IEnumerator CoFadeDailyQuota()
+        {
+            if (!dailyQuotaLog) yield break;
+
+            // setup inicial
+            var rt = dailyQuotaLog.GetComponent<RectTransform>();
+            var startPos = rt ? rt.anchoredPosition : Vector2.zero;
+
+            Color c = dailyQuotaLog.color;
+            c.a = 0f;
+            dailyQuotaLog.color = c;
+            dailyQuotaLog.gameObject.SetActive(true);
+
+            // Fade In
+            float t = 0f;
+            while (t < quotaFadeIn)
+            {
+                t += Time.unscaledDeltaTime;
+                float k = Mathf.Clamp01(t / quotaFadeIn);
+                SetQuotaVisual(k, startPos, Vector2.zero);
+                yield return null;
+            }
+
+            // Hold
+            if (quotaHold > 0f)
+                yield return new WaitForSecondsRealtime(quotaHold);
+
+            // Fade Out (+ move up)
+            t = 0f;
+            while (t < quotaFadeOut)
+            {
+                t += Time.unscaledDeltaTime;
+                float k = Mathf.Clamp01(t / quotaFadeOut);
+                // alpha 1 -> 0 ; pos 0 -> quotaMoveUp
+                SetQuotaVisual(1f - k, startPos, quotaMoveUp * k);
+                yield return null;
+            }
+
+            // Reset/ocultar
+            SetQuotaVisual(0f, startPos, quotaMoveUp);
+            dailyQuotaLog.gameObject.SetActive(false);
+            quotaRoutine = null;
+        }
+
+        private void SetQuotaVisual(float alpha, Vector2 basePos, Vector2 extraOffset)
+        {
+            if (!dailyQuotaLog) return;
+
+            var col = dailyQuotaLog.color;
+            col.a = alpha;
+            dailyQuotaLog.color = col;
+
+            var rt = dailyQuotaLog.GetComponent<RectTransform>();
+            if (rt) rt.anchoredPosition = basePos + extraOffset;
+        }
+
+        // ------- helpers existentes/previos -------
+
+        private int ParseMoney(string raw)
+        {
+            if (string.IsNullOrEmpty(raw)) return 0;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(raw.Length);
+            bool hasSign = false;
+            foreach (char ch in raw)
+            {
+                if (char.IsDigit(ch)) sb.Append(ch);
+                else if (!hasSign && (ch == '-' || ch == '+'))
+                {
+                    sb.Insert(0, ch);
+                    hasSign = true;
+                }
+            }
+
+            return int.TryParse(sb.ToString(), out int v) ? v : 0;
+        }
         // ----------------- helpers -----------------
 
         private void Fill3(TMP_Text t1, TMP_Text t2, TMP_Text t3, System.Collections.Generic.List<string> list)
@@ -129,6 +253,7 @@ namespace ProductsPlease.Managers
                 if (list.Count > 1) b = list[1];
                 if (list.Count > 2) c = list[2];
             }
+
             if (t1) t1.text = a;
             if (t2) t2.text = b;
             if (t3) t3.text = c;
@@ -138,11 +263,11 @@ namespace ProductsPlease.Managers
         {
             switch (c)
             {
-                case Comparator.LessEqual:    return "<=";
+                case Comparator.LessEqual: return "<=";
                 case Comparator.GreaterEqual: return ">=";
-                case Comparator.Equal:        return "==";
-                case Comparator.NotEqual:     return "!=";
-                default:                      return ""; // "Any" -> no símbolo
+                case Comparator.Equal: return "==";
+                case Comparator.NotEqual: return "!=";
+                default: return ""; // "Any" -> no símbolo
             }
         }
 

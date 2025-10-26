@@ -55,11 +55,13 @@ namespace ProductsPlease.World
             if (generator.EvaluateItemAgainstDay(item.data, rules, out List<string> violations))
             {
                 GameManager.Instance.correctScansThisDay++;
+                GameManager.Instance.currentMoney += 10;
                 onAccepted?.Invoke();
             }
             else
             {
                 GameManager.Instance.incorrectScansThisDay++;
+                GameManager.Instance.currentMoney -= 10;
                 if (violations != null && violations.Count > 0)
                     Debug.Log($"[BeltEnd] Rejected '{item.data.displayName}': {string.Join("; ", violations)}");
                 onRejected?.Invoke();
