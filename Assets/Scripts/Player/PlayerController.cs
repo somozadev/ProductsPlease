@@ -28,7 +28,6 @@ namespace ProductsPlease.Player
             playerMotor.Initialise();
             playerInteraction.Initialise();
             playerLook.Initialise();
-            OnEnable();
         }
 
         private void OnEnable()

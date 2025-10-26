@@ -15,7 +15,7 @@ namespace ProductsPlease.Player
         private bool isCrouched;
 
         private float crouchedHeight = .75f;
-        private float standingHeight = 2f;
+        private float standingHeight = 1.75f;
         private const float standingCenterY = 1f;
         private const float crouchedCenterY = 0.3525f;
         private const float crouchLerpSpeed = 10f;

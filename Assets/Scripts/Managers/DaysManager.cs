@@ -1,4 +1,5 @@
 ﻿using System;
+using ProductsPlease.Interactions;
 using UnityEngine;
 
 namespace ProductsPlease.Managers
@@ -11,6 +12,18 @@ namespace ProductsPlease.Managers
         public int dayCount { get; private set; }
         public bool dayInProgress { get; private set; }
         public float timeMultiplier = 1.0f;
+
+
+        public BeltManager belt;
+        public DayRuntimeGenerator generator;
+
+        DayParamsData currentDayRules;
+
+        private void Start()
+        {
+            currentDayRules = generator.GenerateNewRandomDayRules();
+            belt.StartBelt();
+        }
 
         private void Update()
         {
@@ -28,6 +41,7 @@ namespace ProductsPlease.Managers
             dayCount++;
             currentTime = maxDayTime;
             dayInProgress = true;
+            belt.BeginDay(currentDayRules);
         }
 
         public void FinishDay()
@@ -35,6 +49,7 @@ namespace ProductsPlease.Managers
             dayInProgress = false;
             currentTime = maxDayTime;
             CheckBenefits();
+            // belt.StopBelt();
         }
 
         public void CheckBenefits()

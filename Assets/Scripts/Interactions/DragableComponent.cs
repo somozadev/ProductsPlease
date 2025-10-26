@@ -22,6 +22,14 @@ namespace ProductsPlease.Interactions
         Transform jointTrans;
         float dragDepth;
 
+        private void Start()
+        {
+            if (!lineRenderLocation || !lr)
+            {
+                lr = FindAnyObjectByType<LineRenderer>(FindObjectsInactive.Include);
+                lineRenderLocation = lr.transform;
+            }
+        }
 
         void OnMouseDown()
         {
@@ -70,17 +78,24 @@ namespace ProductsPlease.Interactions
             DestroyRope();
             if (jointTrans.gameObject)
                 Destroy(jointTrans.gameObject);
+            
+
         }
 
         Transform AttachJoint(Rigidbody rb, Vector3 attachmentPosition)
         {
+            
+            
             GameObject go = new GameObject("Attachment Point");
             go.hideFlags = HideFlags.HideInHierarchy;
             go.transform.position = attachmentPosition;
 
+   
+            
             var newRb = go.AddComponent<Rigidbody>();
             newRb.isKinematic = true;
 
+            
             var joint = go.AddComponent<ConfigurableJoint>();
             joint.connectedBody = rb;
             joint.configuredInWorldSpace = true;
@@ -96,7 +111,9 @@ namespace ProductsPlease.Interactions
         private JointDrive NewJointDrive(float force, float damping)
         {
             JointDrive drive = new JointDrive();
+#pragma warning disable CS0618 // Type or member is obsolete
             drive.mode = JointDriveMode.Position;
+#pragma warning restore CS0618 // Type or member is obsolete
             drive.positionSpring = force;
             drive.positionDamper = damping;
             drive.maximumForce = Mathf.Infinity;

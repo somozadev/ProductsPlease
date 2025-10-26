@@ -38,6 +38,7 @@ namespace ProductsPlease.Player
 
         private void TryInteract(bool start)
         {
+
             if (!currentInteractable) return;
             if (start)
                 currentInteractable.StartInteract();

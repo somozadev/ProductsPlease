@@ -7,6 +7,7 @@ namespace ProductsPlease.Interactions
     public class InteractableComponent : MonoBehaviour
     {
         private Outline outline;
+        private string initialMessage;
         public string message;
         public UnityEvent OnInteract;
         public UnityEvent OnEndInteract;
@@ -27,6 +28,7 @@ namespace ProductsPlease.Interactions
             OnEndInteract?.Invoke();
         }
 
+       
         public void DisableOutline()
         {
             outline.enabled = false;

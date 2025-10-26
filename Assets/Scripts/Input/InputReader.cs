@@ -89,12 +89,14 @@ namespace ProductsPlease.Player.Input
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.performed || context.started)
+            if (context.started)
+            {
                 interactDebugger = true;
-            else
-                interactDebugger = false;
-            OnInteractEvent?.Invoke(interactDebugger);
-            DetectInputScheme(context.control);
+                OnInteractEvent?.Invoke(true);
+            }
+
+            if (context.control != null)
+                DetectInputScheme(context.control);
         }
 
         public void OnJump(InputAction.CallbackContext context)
